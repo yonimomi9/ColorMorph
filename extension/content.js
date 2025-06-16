@@ -59,5 +59,29 @@
     });
   };
 
-  window.applyColorMorphTheme(); // הפעלה מידית בהטענת הדף
+  // Debounce utility: delays execution to prevent spammy calls
+  function debounce(fn, delay) {
+    let timer = null;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  const debouncedApplyTheme = debounce(() => {
+    console.log("Reapplying theme due to DOM changes");
+    window.applyColorMorphTheme();
+  }, 300);
+
+  // הפעלה מידית בהטענת הדף
+  window.applyColorMorphTheme();
+
+  // האזנה לשינויים ב-DOM עם debounce כדי למנוע קריסה
+  const observer = new MutationObserver(debouncedApplyTheme);
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+  });
+
 })();

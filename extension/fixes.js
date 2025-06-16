@@ -1,5 +1,7 @@
 // fixes.js – Stable version for ColorMorph across ChatGPT, Google, LinkedIn
 (function () {
+  // console.log("✅ fixes.js loaded and executing");
+
   function adjustColorBrightness(hex, amount) {
     hex = hex.startsWith('#') ? hex.slice(1) : hex;
     const num = parseInt(hex, 16);
@@ -23,9 +25,12 @@
 
     root.querySelectorAll('*').forEach(el => {
       const style = getComputedStyle(el);
+      const bg = style.backgroundColor;
+      const isWhiteish = bg === 'rgb(255, 255, 255)' || bg === '#ffffff' || bg.includes('rgba(255,255,255');
       if (
         el.offsetWidth > 20 &&
         el.offsetHeight > 20 &&
+        isWhiteish &&
         style.backgroundImage === 'none' &&
         !['IMG', 'SVG', 'VIDEO'].includes(el.tagName)
       ) {
@@ -64,8 +69,6 @@
   }
 
   function resetThemeStyles(root = document) {
-    if (location.hostname.includes('chat.openai.com')) return;
-
     root.querySelectorAll('*').forEach(el => {
       el.style.backgroundColor = '';
       el.style.color = '';
@@ -100,6 +103,7 @@
     });
   }
 
+
   function fixChatGptSpecific() {
     if (!location.hostname.includes('chat.openai.com')) return;
 
@@ -131,6 +135,19 @@
     const markdowns = document.querySelectorAll('[class*="markdown"]');
     markdowns.forEach(el => {
       el.style.color = fg;
+    });
+
+    // הסרת מלבן רקע מיותר ב־ChatGPT
+    document.querySelectorAll('main > div').forEach(el => {
+      const style = getComputedStyle(el);
+      const isLikelyEmpty = el.children.length === 0 || el.textContent.trim().length < 5;
+      const isHuge = el.offsetHeight > 300 && el.offsetWidth > 300;
+
+      if (isLikelyEmpty && isHuge) {
+        el.style.backgroundColor = 'transparent';
+        el.style.border = 'none';
+        el.style.boxShadow = 'none';
+      }
     });
   }
 
@@ -241,19 +258,84 @@
       }
     });
   }
+  window.applyColorMorphTheme = () => {
+    try {
+      // נסה למשוך ישירות אם אפשר
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        chrome.storage.local.get([window.location.hostname], (result) => {
+          const theme = result[window.location.hostname];
+          applyOrReset(theme);
+        });
+      } else {
+        // אחרת – בקש תמה מה־popup/background
+        window.addEventListener("message", function handleThemeResponse(event) {
+          if (event.data?.type === "COLORMORPH_THEME_RESPONSE") {
+            window.removeEventListener("message", handleThemeResponse);
+            applyOrReset(event.data.theme);
+          }
+        });
 
-  // MutationObserver - apply theme on DOM changes
-  const observer = new MutationObserver((mutationsList) => {
-    for (const mutation of mutationsList) {
-      if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-        window.applyColorMorphTheme?.();
-        break;
+        window.postMessage({ type: "COLORMORPH_THEME_REQUEST", hostname: window.location.hostname }, "*");
       }
+    } catch (err) {
+      console.warn("❗ applyColorMorphTheme error:", err);
     }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+  };
 
-  // Bind to window for cross-scope access
+  function applyOrReset(theme) {
+    if (!theme || !theme.enabled) {
+      // console.log("🛑 Theme disabled — resetting styles completely");
+
+      document.documentElement.style.removeProperty('--colormorph-bg');
+      document.documentElement.style.removeProperty('--colormorph-fg');
+      document.body.style.removeProperty('--colormorph-bg');
+      document.body.style.removeProperty('--colormorph-fg');
+
+      const existingStyle = document.getElementById('colormorph-style');
+      if (existingStyle) existingStyle.remove();
+
+      resetThemeStyles();
+      return;
+    }
+
+    // console.log("🎨 Applying theme...");
+    document.documentElement.style.setProperty('--colormorph-bg', theme.background);
+    document.documentElement.style.setProperty('--colormorph-fg', theme.text);
+    document.body.style.setProperty('--colormorph-bg', theme.background);
+    document.body.style.setProperty('--colormorph-fg', theme.text);
+
+    resetThemeStyles();
+    applyTheme();
+    fixGoogleSpecific();
+    fixLinkedinSpecific();
+    fixChatGptSpecific();
+  }
+
+  const observeWhenReady = () => {
+    if (!document.body) return setTimeout(observeWhenReady, 100);
+
+    let debounceTimer = null;
+    const observer = new MutationObserver(() => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        // console.log("🌀 Debounced mutation – reapplying theme");
+        window.applyColorMorphTheme?.();
+      }, 150); // אפשר גם 100ms אם אתה רוצה מהיר יותר
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+  };
+
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    window.applyColorMorphTheme?.();
+    observeWhenReady();
+  } else {
+    window.addEventListener("DOMContentLoaded", () => {
+      window.applyColorMorphTheme?.();
+      observeWhenReady();
+    });
+  }
+
   window.adjustColorBrightness = adjustColorBrightness;
   window.resetThemeStyles = resetThemeStyles;
   window.applyTheme = applyTheme;
@@ -261,11 +343,7 @@
   window.fixLinkedinSpecific = fixLinkedinSpecific;
   window.fixChatGptSpecific = fixChatGptSpecific;
 
-  window.applyColorMorphTheme = () => {
-    resetThemeStyles();
-    applyTheme();
-    fixGoogleSpecific();
-    fixLinkedinSpecific();
-    fixChatGptSpecific();
-  };
+  document.dispatchEvent(new CustomEvent('ColorMorphReady'));
+  window.fixChatGptSpecific = fixChatGptSpecific;
+
 })();

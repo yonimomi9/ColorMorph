@@ -19,30 +19,50 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
   const enabled = document.getElementById("enableToggle").checked;
   const theme = { background, text, enabled };
 
-    chrome.storage.local.set({ [domain]: theme }, () => {
+  chrome.storage.local.set({ [domain]: theme }, () => {
     if (!url.protocol.startsWith("chrome")) {
-        console.log("Injecting fixes.js into tab", tab.id);
+      console.log("Injecting fixes.js into tab", tab.id);
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: () => {
+          if (!window.fixesInjected) {
+            window.fixesInjected = true;
+            const script = document.createElement('script');
+            script.src = chrome.runtime.getURL('fixes.js');
+            document.documentElement.appendChild(script);
+          }
+        }
+      }, () => {
+        if (chrome.runtime.lastError) {
+          console.error("Error injecting fixes.js:", chrome.runtime.lastError.message);
+          return;
+        }
 
-            chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: (theme) => {
-                console.log("Applying theme immediately via executeScript");
+        chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: (theme) => {
+            document.addEventListener('ColorMorphReady', () => {
+            console.log("✅ ColorMorphReady received – applying theme");
 
-                document.documentElement.style.setProperty('--colormorph-bg', theme.background);
-                document.documentElement.style.setProperty('--colormorph-fg', theme.text);
-                document.body.style.setProperty('--colormorph-bg', theme.background);
-                document.body.style.setProperty('--colormorph-fg', theme.text);
+            document.documentElement.style.setProperty('--colormorph-bg', theme.background);
+            document.documentElement.style.setProperty('--colormorph-fg', theme.text);
+            document.body.style.setProperty('--colormorph-bg', theme.background);
+            document.body.style.setProperty('--colormorph-fg', theme.text);
 
-                if (typeof window.applyColorMorphTheme === 'function') {
-                window.applyColorMorphTheme();
-                } else {
-                console.warn("applyColorMorphTheme is not defined. Theme vars were set.");
-                }
-            },
-            args: [theme]
+            if (typeof window.applyColorMorphTheme === 'function') {
+                window.applyColorMorphTheme(theme);
+                console.log("✅ applyColorMorphTheme called successfully.");
+            } else {
+                console.warn("❌ applyColorMorphTheme not defined.");
+            }
             });
+        },
+        args: [theme]
+        });
+
+      });
     }
-    });
+  });
 });
 
 function applyTheme(theme) {
@@ -159,12 +179,18 @@ function removeInjectedStyle() {
 }
 
 const themes = {
-  "Dark": { background: "#121212", text: "#ffffff" },
-  "Light": { background: "#f5f5f5", text: "#000000" },
-  "Solarized": { background: "#002b36", text: "#839496" },
-  "Neon": { background: "#0f0f0f", text: "#39ff14" },
-  "Custom": null
+  "Custom": null,
+  "Dark": { background: "#1e1e1e", text: "#ffffff" },
+  "Light": { background: "#ffffff", text: "#000000" },
+  "Solarized": { background: "#fdf6e3", text: "#657b83" },
+  "Neon": { background: "#111111", text: "#39ff14" },
+  "Pastel": { background: "#fef6fb", text: "#5d4b6b" },
+  "Matrix": { background: "#0f0f0f", text: "#00ff00" },
+  "Ocean": { background: "#cceeff", text: "#003344" },
+  "Sunset": { background: "#ffcc99", text: "#663300" },
+  "Cyberpunk": { background: "#1a0033", text: "#ff00ff" }
 };
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -182,5 +208,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       value && value.background === saved.background && value.text === saved.text
     );
     document.getElementById("themeSelect").value = found ? found[0] : "Custom";
+  });
+
+  chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+    const domain = new URL(tab.url).hostname;
+    chrome.storage.local.get([domain], (result) => {
+      const saved = result[domain];
+      if (saved?.enabled) {
+      chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (theme) => window.applyColorMorphTheme?.(theme),
+      args: [saved]
+    });
+    } else {
+    chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: () => window.resetThemeStyles?.()
+    });
+    }
+
+    });
+
+    window.addEventListener("message", async (event) => {
+        if (event.source !== window) return;
+        if (event.data?.type === "COLORMORPH_THEME_REQUEST") {
+            const hostname = event.data.hostname;
+
+            chrome.storage.local.get([hostname], (result) => {
+            const theme = result[hostname];
+            window.postMessage({
+                type: "COLORMORPH_THEME_RESPONSE",
+                theme
+            }, "*");
+            });
+        }
+        });
+
   });
 });
