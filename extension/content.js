@@ -6,82 +6,67 @@
       const theme = result[domain];
       if (!theme || !theme.enabled) return;
 
-      const primary = theme.background;
-      const text = theme.text;
+      const bg = theme.background;
+      const fg = theme.text;
 
-      const mid = window.adjustColorBrightness(primary, -10);
-      const soft = window.adjustColorBrightness(primary, 15);
-
-      const css = `
-        html, body, main, section, article {
-          background-color: ${primary} !important;
-          color: ${text} !important;
-        }
-
-        header, nav, aside, footer {
-          background-color: ${soft} !important;
-          color: ${text} !important;
-        }
-
-        .sidebar, [class*="sidebar"], [class*="SideBar"], [class*="side-bar"] {
-          background-color: ${soft} !important;
-          color: ${text} !important;
-        }
-
-        .toolbar, [class*="Toolbar"], [class*="toolbar"] {
-          background-color: ${mid} !important;
-          color: ${text} !important;
-        }
-
-        div, span, p, a, li, td, th, strong, em, b, label,
-        input, button, textarea, select, summary {
-          color: ${text} !important;
-          border-color: ${text} !important;
-          caret-color: ${text} !important;
-        }
-
-        a {
-          color: ${text} !important;
-        }
-
-        img, video, iframe, svg, canvas {
-          filter: brightness(0.9) !important;
-        }
-      `;
+      document.documentElement.classList.add("colormorph-theme");
+      document.documentElement.style.setProperty('--colormorph-bg', bg);
+      document.documentElement.style.setProperty('--colormorph-fg', fg);
 
       const existing = document.getElementById('colormorph-style');
       if (existing) existing.remove();
 
-      const styleTag = document.createElement('style');
-      styleTag.id = 'colormorph-style';
-      styleTag.innerText = css;
-      document.head.appendChild(styleTag);
+      const css = `
+        :root {
+          --colormorph-bg: ${bg};
+          --colormorph-fg: ${fg};
+        }
+
+        html, body, main, section, article, aside, nav, header, footer,
+        .sidebar, .SideBar, .side-bar, .toolbar, .Toolbar,
+        div, span, p, a, li, td, th, strong, em, b, label,
+        input, button, textarea, select, summary {
+          background-color: var(--colormorph-bg) !important;
+          color: var(--colormorph-fg) !important;
+          border-color: var(--colormorph-fg) !important;
+          caret-color: var(--colormorph-fg) !important;
+        }
+
+        a {
+          color: var(--colormorph-fg) !important;
+        }
+
+        img, video, iframe, svg, canvas {
+          filter: brightness(0.95) !important;
+        }
+      `;
+
+      const style = document.createElement('style');
+      style.id = 'colormorph-style';
+      style.textContent = css;
+      document.head.appendChild(style);
     });
   };
 
-  // Debounce utility: delays execution to prevent spammy calls
-  function debounce(fn, delay) {
-    let timer = null;
-    return function (...args) {
+  const debounce = (fn, delay) => {
+    let timer;
+    return (...args) => {
       clearTimeout(timer);
       timer = setTimeout(() => fn.apply(this, args), delay);
     };
-  }
+  };
 
   const debouncedApplyTheme = debounce(() => {
-    console.log("Reapplying theme due to DOM changes");
+    console.log("[ColorMorph] Reapplying theme on DOM mutation");
     window.applyColorMorphTheme();
-  }, 300);
+  }, 200);
 
-  // הפעלה מידית בהטענת הדף
   window.applyColorMorphTheme();
 
-  // האזנה לשינויים ב-DOM עם debounce כדי למנוע קריסה
   const observer = new MutationObserver(debouncedApplyTheme);
   observer.observe(document.body, {
     childList: true,
     subtree: true,
-    attributes: true,
+    attributes: true
   });
-
 })();
