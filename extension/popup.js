@@ -54,7 +54,6 @@ const themes = {
   "Solarized": { background: "#fdf6e3", text: "#657b83" },
   "Neon": { background: "#111111", text: "#39ff14" },
   "Pastel": { background: "#fef6fb", text: "#5d4b6b" },
-  "Matrix": { background: "#0f0f0f", text: "#00ff00" },
   "Ocean": { background: "#cceeff", text: "#003344" },
   "Sunset": { background: "#ffcc99", text: "#663300" },
   "Cyberpunk": { background: "#1a0033", text: "#ff00ff" }

@@ -1,7 +1,12 @@
 :root {
   --colormorph-bg: #202124;
   --colormorph-fg: #ffffff;
+  --colormorph-soft: #2c2f32;
+  --colormorph-card: #26292c;
+  --colormorph-dark: #1a1c1e;
+  --colormorph-border: #444;
 }
+
 
 .colormorph-themed {
   background-color: var(--colormorph-bg) !important;
