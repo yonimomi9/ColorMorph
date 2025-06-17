@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="style.css" />
   <title>ColorMorph</title>
 </head>
-<body>
+<body id="popup-body">
   <div class="popup-container">
     <img src="assets/colormorph.png" alt="ColorMorph Logo" class="main-logo" />
 
@@ -18,21 +18,15 @@
       </label>
     </div>
 
+    <!-- Custom Dropdown Start -->
     <div class="form-row">
-      <label class="form-label" for="themeSelect">Theme:</label>
-      <select id="themeSelect">
-        <option value="Custom">Custom</option>
-        <option value="Dark">Dark</option>
-        <option value="Light">Light</option>
-        <option value="Solarized">Solarized</option>
-        <option value="Neon">Neon</option>
-        <option value="Pastel">Pastel</option>
-        <option value="Matrix">Matrix</option>
-        <option value="Ocean">Ocean</option>
-        <option value="Sunset">Sunset</option>
-        <option value="Cyberpunk">Cyberpunk</option>
-      </select>
+      <label class="form-label" for="customThemeDropdown">Theme:</label>
+      <div class="custom-dropdown" id="customThemeDropdown">
+        <div class="dropdown-selected" id="dropdownSelected" data-value="Custom">Custom</div>
+        <ul class="dropdown-options" id="dropdownOptions"></ul>
+      </div>
     </div>
+    <!-- Custom Dropdown End -->
 
     <div class="form-row">
       <label class="form-label" for="bgColor">Background:</label>

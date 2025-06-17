@@ -87,6 +87,7 @@
       document.documentElement.style.setProperty('--colormorph-card', card);
       document.documentElement.style.setProperty('--colormorph-dark', dark);
       document.documentElement.style.setProperty('--colormorph-border', border);
+      document.documentElement.style.setProperty('--colormorph-accent', theme.accent || "#4a90e2");
 
       const css = `
         .colormorph-theme {
@@ -167,6 +168,32 @@
           background-color: var(--colormorph-bg) !important;
           color: var(--colormorph-fg) !important;
           border-color: var(--colormorph-border) !important;
+        }
+      
+        .colormorph-theme a,
+        .colormorph-theme a:visited {
+          color: var(--colormorph-accent) !important;
+        }
+
+        .colormorph-theme a:hover,
+        .colormorph-theme button:hover,
+        .colormorph-theme .accent-hover:hover {
+          color: var(--colormorph-fg) !important;
+          background-color: var(--colormorph-accent) !important;
+        }
+
+        .colormorph-theme input:focus,
+        .colormorph-theme select:focus,
+        .colormorph-theme textarea:focus,
+        .colormorph-theme button:focus {
+          outline: 2px solid var(--colormorph-accent) !important;
+          border-color: var(--colormorph-accent) !important;
+        }
+
+        .colormorph-theme .accent,
+        .colormorph-theme .highlight,
+        .colormorph-theme .active {
+          color: var(--colormorph-accent) !important;
         }
 
       `;
