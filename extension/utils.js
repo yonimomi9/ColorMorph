@@ -19,6 +19,5 @@
     return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
   }
 
-  // הפיכת הפונקציה לגלובלית כך שתהיה זמינה לכל הסקריפטים
   window.adjustColorBrightness = adjustColorBrightness;
 })();
