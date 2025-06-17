@@ -141,6 +141,7 @@
 
         .colormorph-theme * {
           border-color: var(--colormorph-border) !important;
+          transition: background-color 0.6s ease, color 0.6s ease, border-color 0.6s ease, opacity 0.4s ease-in-out;
         }
 
         .colormorph-theme *::before,
