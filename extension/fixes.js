@@ -108,7 +108,7 @@
           background-color: var(--colormorph-soft) !important;
           color: var(--colormorph-fg) !important;
         }
-
+      
         .colormorph-theme .card, [class*="Card"], article, section, .artdeco-card {
           background-color: var(--colormorph-card) !important;
           color: var(--colormorph-fg) !important;
