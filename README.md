@@ -22,13 +22,13 @@
 ## 📸 Screenshots
 
 ### 🖼️ Logo
-<img src="public/logo.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/logo.png" width="500" alt="ColorMorph Logo"/>
 
 ---
 
 ### 🔄 Before / After
 
-<img src="public/beforeafter.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/beforeafter.png" width="500" alt="ColorMorph Logo"/>
 
 
 | Original | Modified with ColorMorph |
@@ -38,7 +38,7 @@
 ---
 
 ### 🎨 Built-in Themes
-<img src="public/choosetheme.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/choosetheme.png" width="500" alt="ColorMorph Logo"/>
 
 <p float="left">
   <img src="public/ext/google_pastel.png" width="220" alt="Pastel Theme"/>
