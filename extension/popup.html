@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="style.css" />
+  <title>ColorMorph</title>
+</head>
+<body id="popup-body">
+  <div class="popup-container">
+    <img src="assets/colormorph.png" alt="ColorMorph Logo" class="main-logo" />
+
+    <div class="form-row">
+      <label class="form-label">Enable:</label>
+      <label class="switch">
+        <input type="checkbox" id="enableToggle" />
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="customThemeDropdown">Theme:</label>
+      <div class="custom-dropdown" id="customThemeDropdown">
+        <div class="dropdown-selected" id="dropdownSelected" data-value="Custom">Custom</div>
+        <ul class="dropdown-options" id="dropdownOptions"></ul>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="bgColor">Background:</label>
+      <input type="color" id="bgColor" />
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="textColor">Text:</label>
+      <input type="color" id="textColor" />
+    </div>
+
+    <button id="saveBtn">Save</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
