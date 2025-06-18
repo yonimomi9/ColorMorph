@@ -22,28 +22,28 @@
 ## 📸 Screenshots
 
 ### 🖼️ Logo
-<img src="../ColorMorph/public/logo.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/logo.png" width="180" alt="ColorMorph Logo"/>
 
 ---
 
 ### 🔄 Before / After
 
-<img src="../ColorMorph/public/beforeafter.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/beforeafter.png" width="180" alt="ColorMorph Logo"/>
 
 
 | Original | Modified with ColorMorph |
 |----------|--------------------------|
-| ![Before](../ColorMorph/public/ext/before_1.png) | ![After](../ColorMorph/public/ext/after_1.png) |
+| ![Before](public/ext/before_1.png) | ![After](public/ext/after_1.png) |
 
 ---
 
 ### 🎨 Built-in Themes
-<img src="../ColorMorph/public/choosetheme.png" width="180" alt="ColorMorph Logo"/>
+<img src="public/choosetheme.png" width="180" alt="ColorMorph Logo"/>
 
 <p float="left">
-  <img src="../ColorMorph/public/ext/google_pastel.png" width="220" alt="Pastel Theme"/>
-  <img src="../ColorMorph/public/ext/google_cyberpunk.png" width="220" alt="Cyberpunk Theme"/>
-  <img src="../ColorMorph/public/ext/google_ocean.png" width="220" alt="Ocean Theme"/>
+  <img src="public/ext/google_pastel.png" width="220" alt="Pastel Theme"/>
+  <img src="public/ext/google_cyberpunk.png" width="220" alt="Cyberpunk Theme"/>
+  <img src="public/ext/google_ocean.png" width="220" alt="Ocean Theme"/>
 </p>
 
 ---
@@ -52,7 +52,7 @@
 
 Design your own styles:
 
-<img src="../ColorMorph/public/customtheme.png" width="500" alt="Custom Theme Editor"/>
+<img src="public/customtheme.png" width="500" alt="Custom Theme Editor"/>
 
 ---
 
