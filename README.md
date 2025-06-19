@@ -56,7 +56,7 @@ Design your own styles:
 
 ---
 
-##  Installation (Not Available Yet)
+##  Installation
 
 Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/colormorph/effbldihnfhhenknincnfikkigjnnbai)  
 Or manually:
