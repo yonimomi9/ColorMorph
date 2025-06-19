@@ -1,4 +1,4 @@
-# 🎨 ColorMorph
+# ColorMorph
 
 **ColorMorph** is a lightweight Chrome extension that lets you customize the appearance of any website with your own color themes — or choose from our curated presets.
 
@@ -9,24 +9,24 @@
 
 ---
 
-## 🚀 Features
+## Features
 
-- 🌈 10+ premade themes (e.g., Pastel, Cyberpunk, Ocean, Nightmode)
-- ✍️ Fully custom color creation
-- 🔄 On/off toggle per site
-- 💾 Saves your settings locally
-- ⚡ Fast, smooth and responsive
+- 10+ premade themes (e.g., Pastel, Cyberpunk, Ocean, Nightmode)
+- Fully custom color creation
+- On/off toggle per site
+- Saves your settings locally
+- Fast, smooth and responsive
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
-### 🖼️ Logo
+### Logo
 <img src="public/logo.png" width="500" alt="ColorMorph Logo"/>
 
 ---
 
-### 🔄 Before / After
+### Before / After
 
 <img src="public/beforeafter.png" width="500" alt="ColorMorph Logo"/>
 
@@ -37,7 +37,7 @@
 
 ---
 
-### 🎨 Built-in Themes
+### Built-in Themes
 <img src="public/choosetheme.png" width="500" alt="ColorMorph Logo"/>
 
 <p float="left">
@@ -48,7 +48,7 @@
 
 ---
 
-### 🧪 Custom Themes
+### Custom Themes
 
 Design your own styles:
 
@@ -56,7 +56,7 @@ Design your own styles:
 
 ---
 
-## 🧩 Installation (Not Available Yet)
+##  Installation (Not Available Yet)
 
 Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/colormorph/effbldihnfhhenknincnfikkigjnnbai)  
 Or manually:
